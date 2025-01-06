@@ -1,0 +1,27 @@
+[
+    {
+      "name": "Pizza",
+      "image": "../assets/pizza.jpg"
+    },
+    {
+      "name": "Bakery",
+      "image": "../assets/bakary.jpg"
+    },
+    {
+      "name": "Noodles",
+      "image": "../assets/noodles.jpg"
+    },
+    {
+      "name": "Pasta",
+      "image": "../assets/pasta.jpg"
+    },
+    {
+      "name": "Soup",
+      "image": "../assets/soup.jpg"
+    },
+    {
+      "name": "Korean",
+      "image": "../assets/korean.jpg"
+    }
+  ]
+  
