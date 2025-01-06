@@ -35,7 +35,7 @@ body{
 .banner{
     display: flex;
     margin-top: 50px;
-    justify-content: space-evenly;
+    justify-content:space-around;
 
 }
 .slogen{
@@ -50,16 +50,18 @@ body{
     border: 1px solid var(--disable-color);
     border-radius:5px;
     height: 50px;
+    width: 30rem;
     display:flex;
     align-items: center;
     justify-content: center;
-    margin-top: 50px;
+    margin-top: 80px;
+    gap: 110px;
     
     
 }
 .category-name{
     background-color: transparent;
-    font-size: 20px;
+    font-size: 15px;
     border: none;
     margin: 10px;
     
@@ -71,17 +73,18 @@ body{
     border: none;
     border-radius: var(--border-radias);
     height: 35px;
-    width: 100px;
+    width: 150px;
     font-size: 15px;
     cursor: pointer;
     color: var(--text-color);
-    margin: 10px;
+    
+
     
 }
 
 .banner-img{
-   height: auto;
-   width: 20px;
+   height: 200px;
+   width: auto;
     
 }
 
@@ -96,11 +99,11 @@ body{
         gap: 15px;
     }
     .search-bar{
-        gap: 140px;
+        gap: 30px;
     }
 
     .search-button{
-        width: 220px;
+        width: 10rem;
     }
     .category-name{
         font-size: 20px;
@@ -134,6 +137,7 @@ body{
     .search-bar {
         flex-direction: column;
         height: auto;
+        width: 25rem;
         padding: 10px;
     }
 
