@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import "../components/categories.css"; 
-import categoriesData from "../data/categories.json"; 
+import "./categories.css";
+import categoriesData from "../data/categories.json";
 
 const Categories = () => {
   const [categories, setCategories] = useState([]);
