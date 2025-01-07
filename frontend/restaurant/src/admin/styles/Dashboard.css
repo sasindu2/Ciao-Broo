@@ -1,0 +1,150 @@
+.dashboard {
+  padding: 20px;
+  background-color: rgba(0,0,0,0.1);
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.dashboard h1 {
+  color: #ffffff;
+  margin-bottom: 20px;
+  padding: 15px 20px;
+  background-color: #B1171A;
+  border-radius: 8px;
+  font-size: 2rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.orders-section {
+  padding: 20px;
+}
+
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.order-card {
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 8px;
+  background-color: white;
+}
+
+.order-info {
+  margin-bottom: 15px;
+}
+
+.status-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  padding: 15px;
+  background-color: rgba(255, 255, 255, 0);
+  border-radius: 8px;
+}
+
+.status-btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 5px;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  color: #333;
+}
+
+.status-btn:hover {
+  background-color: #B1171A;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.orders-table-section {
+  margin-top: 20px;
+  background-color: white;
+  border-radius: 8px;
+  padding: 0 20px 20px 20px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.orders-table th,
+.orders-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.orders-table th {
+  background-color: #45a049;
+  font-weight: 600;
+  color: white;
+  padding: 15px 12px;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+}
+
+.orders-table tbody tr:hover {
+  background-color: #f5f5f5;
+  transition: background-color 0.3s ease;
+}
+
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.status-badge.pending {
+  background-color: #ffd700;
+  color: #000;
+}
+
+.status-badge.in_progress {
+  background-color: #007bff;
+  color: white;
+}
+
+.status-badge.completed {
+  background-color: #28a745;
+  color: white;
+}
+
+.status-badge.cancelled {
+  background-color: #dc3545;
+  color: white;
+}
+
+.status-select {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  background-color: white;
+  cursor: pointer;
+}
+
+.status-btn.active {
+  background-color: #B1171A;
+  color: white;
+}
+
+.action-cell {
+  white-space: nowrap;
+}
