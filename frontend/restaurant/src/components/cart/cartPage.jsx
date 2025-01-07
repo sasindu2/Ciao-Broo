@@ -2,6 +2,7 @@ import { useCart } from "../../context/CartContext";
 import { Link } from "react-router-dom";
 import "./CartPage.css";
 import { useState } from "react";
+import logo from "../../assets/3d@4x.png";
 
 function CartPage() {
   const { cartItems, removeFromCart, updateQuantity } = useCart();
@@ -46,10 +47,15 @@ function CartPage() {
   return (
     <div className="cart-page">
       <div className="cart-header">
-        <h2>Your Cart</h2>
-        <Link to="/" className="continue-shopping">
-          Continue Shopping
-        </Link>
+        <div className="logo-container">
+          <img src={logo} alt="Restaurant Logo" className="cart-logo" />
+        </div>
+        <div className="header-content">
+          <h2>Your Cart</h2>
+          <Link to="/" className="continue-shopping">
+            Continue Shopping
+          </Link>
+        </div>
       </div>
       <div className="customer-details">
         <h3>Customer Details</h3>
