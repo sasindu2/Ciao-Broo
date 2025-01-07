@@ -1,15 +1,18 @@
+import { CartProvider } from "./context/CartContext";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
-import Categories from "./components/Categories";
 import FoodList from "./components/food/foodList";
+import CartPage from "./components/cart/cartpage";
 
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/categories" element={<Categories />} />
-        <Route path="/foods" element={<FoodList />} />
-      </Routes>
+      <CartProvider>
+        <Routes>
+          <Route path="/" element={<FoodList />} />
+          <Route path="/foods" element={<FoodList />} />
+          <Route path="/cart" element={<CartPage />} />
+        </Routes>
+      </CartProvider>
     </Router>
   );
 }

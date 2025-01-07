@@ -128,7 +128,7 @@ body{
   .add-to-cart-btn, .view-btn {
     flex: 1;
     padding: 8px 16px;
-    color: white;
+    color: rgba(255, 255, 255, 1);
     border: none;
     border-radius: 4px;
     cursor: pointer;
