@@ -24,7 +24,7 @@ const Categories = () => {
               />
             </div>
             <div className="category-overlay">
-              <span className="category-name">{category.name}</span>
+              <span className="categories-name">{category.name}</span>
             </div>
           </div>
         ))}
