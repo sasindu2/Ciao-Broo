@@ -3,16 +3,19 @@ import { useParams, Link } from "react-router-dom";
 import "./foodList.css";
 import pizzaImage from "../../assets/pizza.jpg";
 import logo from "../../assets/3d@4x.png";
-import { useCart } from "../../context/CartContext";
+// import { useCart } from "../../context/CartContext";
 import axios from "axios";
+import useCartStore from "../../store/store";
 
 function FoodList() {
   // const { categoryId } = useParams();
   const { id,name } = useParams(); 
   const [foods, setFoods] = useState([]);
   const [categoryName, setCategoryName] = useState("");
-  const { cartItems, addToCart } = useCart();
+  // const { cartItems, addToCart } = useCart();
 
+  const addToCart = useCartStore((state) => state.addToCart);
+  const itemCount = useCartStore((state) => state.getItemCount());
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -29,8 +32,22 @@ function FoodList() {
   }, [id]);
 
   const handleAddToCart = (food) => {
-    console.log("Adding to cart:", food); // Debug log
-    addToCart(food);
+    
+    // _id: "677e385dd3a1f0d35e692fbb"
+    // category: "677cf988b141581ce03d9737"
+    // description: "description"
+    // image: "https://farm4.staticflickr.com/3075/3168662394_7d7103de7d_z_d.jpg"
+    // name: "test"
+    // price: "12"
+
+    addToCart({
+      id: food._id,
+      name: food.name,
+      image: food.image,
+      price: food.price,
+      qty: 1,
+    });
+
   };
 
   return (
@@ -44,7 +61,7 @@ function FoodList() {
           <h2 className="category-title">{categoryName}</h2>
           <Link to="/cart" className="cart-button">
             <span className="cart-icon">🛒</span>
-            View Cart ({cartItems.length})
+            View Cart ({itemCount})
           </Link>
         </div>
       </div>
