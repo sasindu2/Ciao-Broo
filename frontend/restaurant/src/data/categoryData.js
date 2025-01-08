@@ -3,7 +3,44 @@ export const categoryData = {
       {
         id: 1,
         name: "Pizza",
-        image: "/src/assets/pizza.jpg"
+        image: "/src/assets/pizza.jpg",
+        items: [
+        {
+          "id": "p1",
+          "name": "Hot Honey Chicken",
+          "price": 34,
+          "description": "A dynamic duo of Spicy Nal Miris & mouthwatering Devilled Chicken Where tradition meets taste! Made with the perfect blend of Mozzarella Cheese and a curated selection of 2 or more luscious toppings.",
+          "image": "../assets/hotpizza.png",
+        },
+
+
+        {
+          "id": "p1",
+          "name": "Hot Honey Chicken",
+          "price": 34,
+          "description": "A dynamic duo of Spicy Nal Miris & mouthwatering Devilled Chicken Where tradition meets taste! Made with the perfect blend of Mozzarella Cheese and a curated selection of 2 or more luscious toppings.",
+          "image": "../assets/hotpizza.png",
+        },
+
+
+
+        {
+          "id": "p1",
+          "name": "Hot Honey Chicken",
+          "price": 34,
+          "description": "A dynamic duo of Spicy Nal Miris & mouthwatering Devilled Chicken Where tradition meets taste! Made with the perfect blend of Mozzarella Cheese and a curated selection of 2 or more luscious toppings.",
+          "image": "../assets/hotpizza.png",
+        },
+
+
+        {
+          "id": "p1",
+          "name": "Hot Honey Chicken",
+          "price": 34,
+          "description": "A dynamic duo of Spicy Nal Miris & mouthwatering Devilled Chicken Where tradition meets taste! Made with the perfect blend of Mozzarella Cheese and a curated selection of 2 or more luscious toppings.",
+          "image": "../assets/hotpizza.png",
+        },
+      ]
       },
       {
         id: 2,
