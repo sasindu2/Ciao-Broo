@@ -18,7 +18,7 @@ function FoodList() {
     const fetchCategories = async () => {
       try {
         setCategoryName(name);
-        const response = await axios.get(`http://localhost:5000/api/Food/${id}`);
+        const response = await axios.get(`${import.meta.env.VITE_API}/api/Food/${id}`);
         setFoods(response.data.data);
       } catch (error) {
         console.error("Error fetching categories:", error);
