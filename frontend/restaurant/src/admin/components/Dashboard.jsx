@@ -4,54 +4,13 @@ import "../styles/Dashboard.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import Swal from "sweetalert2";
+import axios from "axios";
+
 
 const Dashboard = () => {
-  // Mock data for testing
-  const mockOrders = [
-    {
-      id: 1,
-      customerName: "John Doe",
-      phoneNumber: "+1 234-567-8900",
-      tableNumber: "T1",
-      items: [
-        { name: "Burger", price: 12.99 },
-        { name: "Fries", price: 4.99 },
-        { name: "Coke", price: 2.99 },
-      ],
-      status: "pending",
-      date: "2024-03-15",
-      totalAmount: 20.97,
-    },
-    {
-      id: 2,
-      customerName: "Jane Smith",
-      phoneNumber: "+1 234-567-8901",
-      tableNumber: "T2",
-      items: [
-        { name: "Pizza", price: 15.99 },
-        { name: "Wings", price: 10.99 },
-      ],
-      status: "in_progress",
-      date: "2024-03-15",
-      totalAmount: 26.98,
-    },
-    {
-      id: 3,
-      customerName: "Mike Johnson",
-      phoneNumber: "+1 234-567-8902",
-      tableNumber: "T3",
-      items: [
-        { name: "Salad", price: 8.99 },
-        { name: "Sandwich", price: 10.99 },
-        { name: "Tea", price: 3.99 },
-      ],
-      status: "completed",
-      date: "2024-03-15",
-      totalAmount: 23.97,
-    },
-  ];
 
-  const [orders, setOrders] = useState(mockOrders);
+
+  const [orders, setOrders] = useState([]);
   const [filterStatus, setFilterStatus] = useState("all");
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -106,6 +65,48 @@ const Dashboard = () => {
       .toFixed(2);
   };
 
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const authData = JSON.parse(localStorage.getItem("authToken"));
+        const token = authData?.token;
+        // console.log(token)
+        const response = await axios.get(`${import.meta.env.VITE_API}/api/Order/`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const apiOrders = response.data
+          .map((order) => ({
+            id: order._id,
+            customerName: order.customerName,
+            phoneNumber: order.customerTel,
+            tableNumber: order.tableNumber,
+            items: order.products.map((product) => ({
+              name: product.name,
+              price: parseFloat(product.price),
+              qty: product.qty
+            })),
+            status: order.order_status,
+            date: new Date(order.createdAt).toLocaleDateString(),
+            totalAmount: parseFloat(order.totalPrice),
+            createdAt: new Date(order.createdAt),
+          }))
+          .sort((a, b) => b.createdAt - a.createdAt);
+
+        setOrders(apiOrders);
+
+
+      } catch (error) {
+        console.error("Error fetching Orders:", error);
+      }
+    };
+
+    fetchOrders();
+  }, []);
+
+
   return (
     <div className="dashboard">
       <h1>Dashboard</h1>
@@ -118,25 +119,29 @@ const Dashboard = () => {
             All Orders
           </button>
           <button
-            className={`status-btn ${
-              filterStatus === "pending" ? "active" : ""
-            }`}
+            className={`status-btn ${filterStatus === "pending" ? "active" : ""
+              }`}
             onClick={() => setFilterStatus("pending")}
           >
             New Orders
           </button>
           <button
-            className={`status-btn ${
-              filterStatus === "in_progress" ? "active" : ""
-            }`}
+            className={`status-btn ${filterStatus === "in_progress" ? "active" : ""
+              }`}
             onClick={() => setFilterStatus("in_progress")}
           >
             In Progress
           </button>
           <button
-            className={`status-btn ${
-              filterStatus === "completed" ? "active" : ""
-            }`}
+            className={`status-btn ${filterStatus === "delivered" ? "active" : ""
+              }`}
+            onClick={() => setFilterStatus("delivered")}
+          >
+            Delivered
+          </button>
+          <button
+            className={`status-btn ${filterStatus === "completed" ? "active" : ""
+              }`}
             onClick={() => setFilterStatus("completed")}
           >
             Completed
@@ -165,7 +170,7 @@ const Dashboard = () => {
                     className="clickable-row"
                     style={{ cursor: "pointer" }}
                   >
-                    <td>#{order.id}</td>
+                    <td>{order.id.slice(-5)}</td>
                     <td>{order.tableNumber}</td>
                     <td>{order.customerName}</td>
                     <td>{order.phoneNumber}</td>
@@ -190,8 +195,15 @@ const Dashboard = () => {
                             confirmButtonColor: "#3085d6",
                             cancelButtonColor: "#d33",
                             confirmButtonText: "Yes, delete it!",
-                          }).then((result) => {
+                          }).then(async (result) => {
                             if (result.isConfirmed) {
+                              const authData = JSON.parse(localStorage.getItem("authToken"));
+                              const token = authData?.token;
+                              const response = await axios.delete(`${import.meta.env.VITE_API}/api/Order/${order.id}`, {
+                                headers: {
+                                  Authorization: `Bearer ${token}`,
+                                },
+                              });
                               setOrders(
                                 orders.filter((o) => o.id !== order.id)
                               );
@@ -247,7 +259,7 @@ const Dashboard = () => {
                         tableNumber: e.target.value,
                       })
                     }
-                  />
+                    disabled />
                 </div>
                 <div className="form-row">
                   <div className="form-group-1">
@@ -261,7 +273,7 @@ const Dashboard = () => {
                           customerName: e.target.value,
                         })
                       }
-                    />
+                      disabled />
                   </div>
                   <div className="form-group-1">
                     <label>Phone Number:</label>
@@ -274,7 +286,7 @@ const Dashboard = () => {
                           phoneNumber: e.target.value,
                         })
                       }
-                    />
+                      disabled />
                   </div>
                 </div>
                 <div className="form-group-1">
@@ -283,8 +295,10 @@ const Dashboard = () => {
                     {selectedOrder.items.map((item, index) => (
                       <div key={index} className="item-row">
                         <input type="text" value={item.name} readOnly />
-                        <input type="number" value={item.price} disabled />
-                        <button
+                        <input type="text" value={`qty: ${item.qty}`} disabled />
+                        <input type="text" value={`price: ${item.price}`} disabled />
+
+                        {/* <button
                           type="button"
                           className="remove-item"
                           onClick={() => {
@@ -299,7 +313,7 @@ const Dashboard = () => {
                           }}
                         >
                           ×
-                        </button>
+                        </button> */}
                       </div>
                     ))}
                   </div>
@@ -317,18 +331,46 @@ const Dashboard = () => {
                     <label>Status:</label>
                     <select
                       value={selectedOrder.status}
-                      onChange={(e) =>
-                        setSelectedOrder({
-                          ...selectedOrder,
+                      onChange={async (e) => {
+                        setSelectedOrder((prevOrder) => ({
+                          ...prevOrder,
                           status: e.target.value,
-                        })
-                      }
+                        }));
+                        
+                        const authData = JSON.parse(localStorage.getItem("authToken"));
+                        const token = authData?.token;
+
+                        try {
+                          // Send a PATCH request to update the order status
+                          const response = await axios.patch(
+                            `${import.meta.env.VITE_API}/api/Order/${selectedOrder.id}`,
+                            {
+                              order_status: e.target.value, // Update the status with the new value
+                            },
+                            {
+                              headers: {
+                                Authorization: `Bearer ${token}`, // Pass the token for authentication
+                              },
+                            }
+                          );
+
+                          console.log("Order status updated:", response.data);
+                          
+                          alert("Order status updated successfully!");
+                        } catch (error) {
+                          console.error("Error updating order status:", error);
+                          alert("Failed to update order status. Please try again.");
+                        }
+                      }}
                     >
                       <option value="pending">Pending</option>
                       <option value="in_progress">In Progress</option>
+                      <option value="delivered">Delivered</option>
                       <option value="completed">Completed</option>
-                      <option value="cancelled">Cancelled</option>
+                      <option value="rejected">Cancelled</option>
                     </select>
+
+
                   </div>
                 </div>
                 <div className="modal-footer">

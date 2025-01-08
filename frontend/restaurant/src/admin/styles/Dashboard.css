@@ -122,6 +122,11 @@
   color: white;
 }
 
+.status-badge.delivered {
+  background-color: #cedb1f;
+  color: white;
+}
+
 .status-badge.completed {
   background-color: #28a745;
   color: white;
