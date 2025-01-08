@@ -2,7 +2,7 @@
 import { CartProvider } from "./context/CartContext";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import FoodList from "./components/food/foodList";
-import CartPage from "./components/cart/cartpage";
+import CartPage from "./components/cart/cartPage";
 import Categories from "./components/Categories";
 import AdminRoutes from "./routes/AdminRoutes";
 
@@ -19,7 +19,6 @@ function App() {
         </Routes>
       </CartProvider>
     </Router>
-
   );
 }
 

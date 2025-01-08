@@ -15,7 +15,7 @@ body{
 }
 
 .header{
-    padding: 20px 30px ;
+    padding: 15px 30px;
   
  
 
@@ -34,7 +34,7 @@ body{
 
 .banner{
     display: flex;
-    margin-top: 50px;
+    margin-top: 30px;
     justify-content:space-around;
 
 }
@@ -64,8 +64,11 @@ body{
     font-size: 15px;
     border: none;
     margin: 10px;
-    
-    
+    color: var(--text-color);
+}
+
+.category-name::placeholder {
+    color: var(--disable-color);
 }
 
 .search-button{
@@ -91,8 +94,8 @@ body{
 /* Responsive Styles */
 @media (max-width: 768px) {
     .logo{
-        height: 47px;
-        width: 65px;
+        height: 35px;
+        width: auto;
     }
     .header-section {
         flex-direction: column;
@@ -127,29 +130,33 @@ body{
 @media (max-width: 576px) {
 
     .logo{
-        height: 57px;
-        width: 65px;
+        height: 30px;
+        width: auto;
     }
     .slogen {
-        font-size: 35px;
+        font-size: 30px;
+        margin-bottom: 10px;
     }
 
     .search-bar {
         flex-direction: column;
         height: auto;
-        width: 25rem;
-        padding: 2px;
-        margin-top: 2rem;
+        width: 90%;
+        max-width: 300px;
+        padding: 5px;
+        margin: 1rem auto;
         gap: 8px;
     }
 
-    .category-name{
+    .category-name {
         font-size: 15px;
-        
+        width: 90%;
+        text-align: center;
     }
+
     .search-button {
-        width: 95%;
-        margin: 5px 0;
+        width: 90%;
+        margin: 5px auto;
     }
 
     .banner-img {
@@ -180,27 +187,48 @@ body{
 
 
 .categories-container {
-    background-color: #1a1a1a;
+    background-image: url('/src/assets/BG-1.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: rgba(26, 26, 26, 0.95);
     padding: 2rem;
     min-height: 100vh;
-  }
-  
-  .categories-title {
+    position: relative;
+}
+
+.categories-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(26, 26, 26, 0.85);
+    z-index: 1;
+}
+
+.categories-title, .categories-grid {
+    position: relative;
+    z-index: 2;
+}
+
+.categories-title {
     color: var(--text-color);
     font-size: 1.8rem;
     margin-bottom: 2rem;
     font-weight: 600;
-  }
-  
-  .categories-grid {
+}
+
+.categories-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 1.5rem;
     max-width: 1200px;
     margin: 0 auto;
-  }
-  
-  .category-card {
+}
+
+.category-card {
     position: relative;
     border-radius: 12px;
     overflow: hidden;
@@ -208,26 +236,26 @@ body{
     background-color: #000;
     cursor: pointer;
     transition: transform 0.3s ease;
-  }
-  
-  .category-card:hover {
+}
+
+.category-card:hover {
     transform: translateY(-5px);
-  }
-  
-  .image-wrapper {
+}
+
+.image-wrapper {
     width: 100%;
     height: 100%;
     position: relative;
-  }
-  
-  .category-image {
+}
+
+.category-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
-  }
-  
-  .category-overlay {
+}
+
+.category-overlay {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -240,32 +268,147 @@ body{
     max-height: 20%;
     display: flex;
     align-items: flex-end;
-  }
-  
-  .categories-name {
+}
+
+.categories-name {
     color: var(--text-color);
     font-size: 1.5rem;
     font-weight: 800;
-  }
-  
-  @media (max-width: 768px) {
+}
+
+@media (max-width: 768px) {
     .categories-grid {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1rem;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
     }
-  }
-  
-  @media (max-width: 480px) {
+}
+
+@media (max-width: 480px) {
     .categories-grid {
-      grid-template-columns: repeat(2, 1fr); 
-      gap: 0.5rem; 
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 0.5rem; 
     }
-  
+
     .categories-container {
-      padding: 1rem; 
+        padding: 1rem; 
     }
     
     .categoies-name {
-      font-size: 1.2rem; 
+        font-size: 1.2rem; 
     }
-  }
+}
+
+/* Tablet View (768px to 1024px) */
+@media screen and (max-width: 1024px) {
+    .categories-container {
+        padding: 20px;
+    }
+
+    .categories-grid {
+        grid-template-columns: repeat(3, 1fr); /* 3 items per row for tablets */
+        gap: 15px;
+    }
+
+    .category-card {
+        height: 180px;
+    }
+
+    .categories-title {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .categories-name {
+        font-size: 18px;
+    }
+}
+
+/* Mobile View (less than 768px) */
+@media screen and (max-width: 767px) {
+    .categories-container {
+        padding: 15px;
+    }
+
+    .categories-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 items per row for mobile */
+        gap: 10px;
+    }
+
+    .category-card {
+        height: 150px;
+    }
+
+    .categories-title {
+        font-size: 20px;
+        margin-bottom: 15px;
+    }
+
+    .categories-name {
+        font-size: 16px;
+    }
+
+    .image-wrapper img {
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+/* Small Mobile View (less than 480px) */
+@media screen and (max-width: 480px) {
+    .categories-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .category-card {
+        height: 140px;
+    }
+
+    .categories-name {
+        font-size: 14px;
+    }
+}
+
+/* Add these new styles */
+.search-container {
+    position: relative;
+    width: 30rem;
+}
+
+.suggestions-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: var(--background-color);
+    border: 1px solid var(--disable-color);
+    border-radius: 5px;
+    margin-top: 5px;
+    padding: 0;
+    list-style: none;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.suggestions-list li {
+    padding: 10px 15px;
+    color: var(--text-color);
+    cursor: pointer;
+}
+
+.suggestions-list li:hover {
+    background-color: rgba(206, 43, 55, 0.2);
+}
+
+/* Update the existing media query for mobile responsiveness */
+@media (max-width: 576px) {
+    .search-container {
+        width: 90%;
+        max-width: 300px;
+    }
+    
+    .suggestions-list {
+        width: 100%;
+    }
+}
