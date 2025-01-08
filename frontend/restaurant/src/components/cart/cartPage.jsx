@@ -1,11 +1,13 @@
-import { useCart } from "../../context/CartContext";
+
 import { Link, useNavigate } from "react-router-dom";
 import "./CartPage.css";
 import { useState } from "react";
 import logo from "../../assets/3d@4x.png";
+import useCartStore from "../../store/store";
+
 
 function CartPage() {
-  const { cartItems, removeFromCart, updateQuantity } = useCart();
+
   const navigate = useNavigate();
   const [customerDetails, setCustomerDetails] = useState({
     name: "",
@@ -14,10 +16,21 @@ function CartPage() {
   });
   const [showError, setShowError] = useState(false);
 
-  const total = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
+  const cartItemsets = useCartStore((state) => state.getAllItems());
+  const itemupdateQuantity = useCartStore((state) => state.updateQuantity);
+  const itemuremove = useCartStore((state) => state.removeFromCart);
+  const totalPrice = useCartStore((state) => state.getTotalPrice());
+
+
+  const handleIncrement = (id,qty) => {
+    itemupdateQuantity(id, qty + 1);
+  };
+
+  const handleDecrement = (id,qty) => {
+    if (qty > 1) {
+      itemupdateQuantity(id, qty - 1);
+    }
+  };
 
   const handleCustomerDetailsChange = (e) => {
     const { name, value } = e.target;
@@ -27,26 +40,54 @@ function CartPage() {
     }));
   };
 
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
     if (
       !customerDetails.name ||
       !customerDetails.phone ||
       !customerDetails.tableNumber
     ) {
       setShowError(true);
-      // Scroll to customer details section
       document
         .querySelector(".customer-details")
         .scrollIntoView({ behavior: "smooth" });
       return;
     }
     setShowError(false);
-    // Proceed with checkout logic here
-    console.log("Proceeding to checkout", { customerDetails, cartItems });
+    console.log("Proceeding to checkout", { customerDetails });
+    
+    const orderData = {
+      customerName: customerDetails.name,
+      customerTel: customerDetails.phone,
+      tableNumber: customerDetails.tableNumber,
+      products: cartItemsets,
+      totalPrice: totalPrice.toFixed(2), 
+    };
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API}/api/Order`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderData),
+      });
+  
+      if (response.ok) {
+        const result = await response.json();
+        console.log("Order successfully placed!", result);
+        useCartStore.getState().clearCart();
+        navigate("/");
+      } else {
+        console.error("Failed to place order", response.statusText);
+      }
+    } catch (error) {
+      console.error("An error occurred during checkout:", error);
+    }
+
   };
 
   const handleContinueShopping = () => {
-    navigate("/foods"); // Navigate to the foods page
+    navigate("/"); 
   };
 
   return (
@@ -109,7 +150,7 @@ function CartPage() {
         </div>
       </div>
 
-      {cartItems.length === 0 ? (
+      {cartItemsets.length === 0 ? (
         <div className="empty-cart">
           <p>Your cart is empty</p>
           <Link to="/" className="start-shopping">
@@ -119,7 +160,7 @@ function CartPage() {
       ) : (
         <>
           <div className="cart-items">
-            {cartItems.map((item) => (
+            {cartItemsets.map((item) => (
               <div key={item.id} className="cart-item">
                 <img
                   src={item.image}
@@ -133,26 +174,26 @@ function CartPage() {
                     <div className="quantity-controls">
                       <button
                         onClick={() =>
-                          updateQuantity(item.id, item.quantity - 1)
+                          handleDecrement(item.id, item.qty)
                         }
                       >
                         -
                       </button>
-                      <span>{item.quantity}</span>
+                      <span>{item.qty}</span>
                       <button
                         onClick={() =>
-                          updateQuantity(item.id, item.quantity + 1)
+                          handleIncrement(item.id, item.qty)
                         }
                       >
                         +
                       </button>
                     </div>
                     <span className="item-price">
-                      ${(item.price * item.quantity).toFixed(2)}
+                      ${(item.price * item.qty).toFixed(2)}
                     </span>
                     <button
                       className="remove-item"
-                      onClick={() => removeFromCart(item.id)}
+                      onClick={() => itemuremove(item.id)}
                     >
                       Remove
                     </button>
@@ -165,7 +206,7 @@ function CartPage() {
           <div className="cart-summary">
             <div className="total">
               <span>Total:</span>
-              <span>${total.toFixed(2)}</span>
+              <span>${totalPrice.toFixed(2)}</span>
             </div>
             <button className="checkout-button" onClick={handleCheckout}>
               Proceed to Checkout
