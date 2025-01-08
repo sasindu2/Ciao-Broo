@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/Login.css";
+import axios from "axios";
+import { setAuthToken } from "../../routes/ProtectedRoute";
+
 
 const Login = () => {
   const navigate = useNavigate();
@@ -25,22 +28,21 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("/api/admin/login", {
-        method: "POST",
+      const response = await axios.post(`${import.meta.env.VITE_API}/api/Admin/login`, formData, {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
       });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        localStorage.setItem("adminToken", data.token);
-        navigate("/admin/dashboard");
+      const data = response.data;
+      console.log("Login response:", response.data);
+      
+      if (response.status === 200) { 
+        setAuthToken(data.token);
+        navigate("/admin/dashboard"); 
       } else {
         setError(data.message || "Invalid credentials. Please try again.");
       }
+
     } catch (err) {
       console.error("Login error:", err);
       setError(
