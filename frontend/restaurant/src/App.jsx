@@ -1,3 +1,6 @@
+
+      
+    
 import { CartProvider } from "./context/CartContext";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import FoodList from "./components/food/foodList";
@@ -18,6 +21,7 @@ function App() {
         </Routes>
       </CartProvider>
     </Router>
+
   );
 }
 
