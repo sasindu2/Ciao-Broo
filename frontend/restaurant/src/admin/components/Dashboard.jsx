@@ -1,6 +1,9 @@
 /* eslint-disable-next-line no-unused-vars */
 import React, { useState, useEffect } from "react";
 import "../styles/Dashboard.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import Swal from "sweetalert2";
 
 const Dashboard = () => {
   // Mock data for testing
@@ -149,7 +152,6 @@ const Dashboard = () => {
                   <th>Table No.</th>
                   <th>Customer Name</th>
                   <th>Phone Number</th>
-                  <th>Items</th>
                   <th>Total Amount</th>
                   <th>Status</th>
                   <th>Actions</th>
@@ -167,7 +169,6 @@ const Dashboard = () => {
                     <td>{order.tableNumber}</td>
                     <td>{order.customerName}</td>
                     <td>{order.phoneNumber}</td>
-                    <td>{order.items.map((item) => item.name).join(", ")}</td>
                     <td>${order.totalAmount}</td>
                     <td>
                       <span className={`status-badge ${order.status}`}>
@@ -178,18 +179,33 @@ const Dashboard = () => {
                       className="action-cell"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      <select
-                        value={order.status}
-                        onChange={(e) =>
-                          updateOrderStatus(order.id, e.target.value)
-                        }
-                        className="status-select"
+                      <button
+                        className="delete-btn"
+                        onClick={() => {
+                          Swal.fire({
+                            title: "Are you sure?",
+                            text: "You won't be able to revert this!",
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#3085d6",
+                            cancelButtonColor: "#d33",
+                            confirmButtonText: "Yes, delete it!",
+                          }).then((result) => {
+                            if (result.isConfirmed) {
+                              setOrders(
+                                orders.filter((o) => o.id !== order.id)
+                              );
+                              Swal.fire(
+                                "Deleted!",
+                                "Order has been deleted.",
+                                "success"
+                              );
+                            }
+                          });
+                        }}
                       >
-                        <option value="pending">Pending</option>
-                        <option value="in_progress">In Progress</option>
-                        <option value="completed">Completed</option>
-                        <option value="cancelled">Cancelled</option>
-                      </select>
+                        <FontAwesomeIcon icon={faTrash} />
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -216,11 +232,11 @@ const Dashboard = () => {
                   handleOrderUpdate(selectedOrder);
                 }}
               >
-                <div className="form-group">
+                <div className="form-group-1">
                   <label>Order ID:</label>
                   <input type="text" value={`#${selectedOrder.id}`} disabled />
                 </div>
-                <div className="form-group">
+                <div className="form-group-1">
                   <label>Table Number:</label>
                   <input
                     type="text"
@@ -234,7 +250,7 @@ const Dashboard = () => {
                   />
                 </div>
                 <div className="form-row">
-                  <div className="form-group">
+                  <div className="form-group-1">
                     <label>Customer Name:</label>
                     <input
                       type="text"
@@ -247,7 +263,7 @@ const Dashboard = () => {
                       }
                     />
                   </div>
-                  <div className="form-group">
+                  <div className="form-group-1">
                     <label>Phone Number:</label>
                     <input
                       type="text"
@@ -261,48 +277,13 @@ const Dashboard = () => {
                     />
                   </div>
                 </div>
-                <div className="form-group">
+                <div className="form-group-1">
                   <label>Order Items:</label>
                   <div className="items-list">
                     {selectedOrder.items.map((item, index) => (
                       <div key={index} className="item-row">
-                        <input
-                          type="text"
-                          value={item.name}
-                          onChange={(e) => {
-                            const newItems = [...selectedOrder.items];
-                            newItems[index] = {
-                              ...newItems[index],
-                              name: e.target.value,
-                            };
-                            setSelectedOrder({
-                              ...selectedOrder,
-                              items: newItems,
-                              totalAmount: calculateTotal(newItems),
-                            });
-                          }}
-                          placeholder="Item name"
-                        />
-                        <input
-                          type="number"
-                          value={item.price}
-                          onChange={(e) => {
-                            const newItems = [...selectedOrder.items];
-                            newItems[index] = {
-                              ...newItems[index],
-                              price: parseFloat(e.target.value) || 0,
-                            };
-                            setSelectedOrder({
-                              ...selectedOrder,
-                              items: newItems,
-                              totalAmount: calculateTotal(newItems),
-                            });
-                          }}
-                          placeholder="Price"
-                          className="price-input"
-                          step="0.01"
-                          min="0"
-                        />
+                        <input type="text" value={item.name} readOnly />
+                        <input type="number" value={item.price} disabled />
                         <button
                           type="button"
                           className="remove-item"
@@ -321,27 +302,10 @@ const Dashboard = () => {
                         </button>
                       </div>
                     ))}
-                    <button
-                      type="button"
-                      className="add-item"
-                      onClick={() => {
-                        const newItems = [
-                          ...selectedOrder.items,
-                          { name: "", price: 0 },
-                        ];
-                        setSelectedOrder({
-                          ...selectedOrder,
-                          items: newItems,
-                          totalAmount: calculateTotal(newItems),
-                        });
-                      }}
-                    >
-                      + Add Item
-                    </button>
                   </div>
                 </div>
                 <div className="form-row">
-                  <div className="form-group">
+                  <div className="form-group-1">
                     <label>Total Amount:</label>
                     <input
                       type="number"
@@ -349,7 +313,7 @@ const Dashboard = () => {
                       readOnly
                     />
                   </div>
-                  <div className="form-group">
+                  <div className="form-group-1">
                     <label>Status:</label>
                     <select
                       value={selectedOrder.status}

@@ -19,20 +19,20 @@ const Sidebar = () => {
           Dashboard
         </NavLink>
         <NavLink
-          to="/admin/add-category"
+          to="/admin/CategoryList"
           className={({ isActive }) =>
             isActive ? "nav-link active" : "nav-link"
           }
         >
-          Add New Category
+          Category
         </NavLink>
         <NavLink
-          to="/admin/add-items"
+          to="/admin/ItemList"
           className={({ isActive }) =>
             isActive ? "nav-link active" : "nav-link"
           }
         >
-          Add New Items
+          Items
         </NavLink>
       </nav>
     </div>
