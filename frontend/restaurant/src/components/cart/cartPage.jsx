@@ -1,11 +1,12 @@
 import { useCart } from "../../context/CartContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./CartPage.css";
 import { useState } from "react";
 import logo from "../../assets/3d@4x.png";
 
 function CartPage() {
   const { cartItems, removeFromCart, updateQuantity } = useCart();
+  const navigate = useNavigate();
   const [customerDetails, setCustomerDetails] = useState({
     name: "",
     phone: "",
@@ -44,6 +45,10 @@ function CartPage() {
     console.log("Proceeding to checkout", { customerDetails, cartItems });
   };
 
+  const handleContinueShopping = () => {
+    navigate("/foods"); // Navigate to the foods page
+  };
+
   return (
     <div className="cart-page">
       <div className="cart-header">
@@ -52,9 +57,12 @@ function CartPage() {
         </div>
         <div className="header-content">
           <h2>Your Cart</h2>
-          <Link to="/" className="continue-shopping">
+          <button
+            onClick={handleContinueShopping}
+            className="continue-shopping"
+          >
             Continue Shopping
-          </Link>
+          </button>
         </div>
       </div>
       <div className="customer-details">
