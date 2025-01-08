@@ -74,7 +74,7 @@
   margin-top: 20px;
   background-color: white;
   border-radius: 8px;
-  padding: 0 20px 20px 20px;
+  
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
@@ -339,7 +339,7 @@
   -webkit-appearance: none;
   -moz-appearance: textfield;
   appearance: none;
-  background-color: #f5f5f5;  /* Light gray background for disabled state */
+  background-color: #f5f5f5;  
   cursor: not-allowed;
 }
 

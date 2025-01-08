@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCloudUploadAlt } from "@fortawesome/free-solid-svg-icons";
 import "../styles/AddCategory.css";
 
 const AddCategory = () => {
@@ -12,7 +14,6 @@ const AddCategory = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission here
     console.log("Category Name:", categoryName);
     console.log("Category Image:", categoryImage);
   };
@@ -26,6 +27,7 @@ const AddCategory = () => {
           <input
             type="text"
             id="categoryName"
+            className="form-control"
             value={categoryName}
             onChange={(e) => setCategoryName(e.target.value)}
             placeholder="Enter category name"
@@ -34,22 +36,35 @@ const AddCategory = () => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="categoryImage">Category Image</label>
-          <input
-            type="file"
-            id="categoryImage"
-            accept="image/*"
-            onChange={handleImageChange}
-            required
-          />
-          {categoryImage && (
-            <div className="image-preview">
-              <img
-                src={URL.createObjectURL(categoryImage)}
-                alt="Category preview"
+          <label>Category Image</label>
+          <div className="upload-section">
+            <div className="file-upload-wrapper">
+              <input
+                type="file"
+                id="file-upload"
+                className="file-upload-input"
+                accept="image/*"
+                onChange={handleImageChange}
+                required
               />
+              {!categoryImage ? (
+                <label htmlFor="file-upload" className="file-upload-label">
+                  <FontAwesomeIcon
+                    icon={faCloudUploadAlt}
+                    className="upload-icon"
+                  />
+                  <span>Choose a file or drag it here</span>
+                </label>
+              ) : (
+                <div className="image-preview">
+                  <img
+                    src={URL.createObjectURL(categoryImage)}
+                    alt="Category preview"
+                  />
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
 
         <button type="submit" className="submit-btn">
