@@ -5,11 +5,14 @@ import "../styles/AdminLayout.css";
 
 const AdminLayout = () => {
   return (
-    <div className="admin-layout">
+    <div
+      className="admin-layout"
+      style={{ position: "relative", overflow: "hidden" }}
+    >
       <Sidebar />
-      <main className="admin-content">
+      <div className="admin-content">
         <Outlet />
-      </main>
+      </div>
     </div>
   );
 };
