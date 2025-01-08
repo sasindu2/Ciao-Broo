@@ -82,7 +82,7 @@ function FoodList() {
                   >
                     Add to Cart
                   </button>
-                  <Link to="/cart" className="view-btn">
+                  <Link to={`/food/${food.id}`} className="view-btn">
                     View
                   </Link>
                 </div>

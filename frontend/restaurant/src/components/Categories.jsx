@@ -1,12 +1,15 @@
 
-import React, { useState, useEffect } from 'react';
 import './styles.css'
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import Header from "./Header";
+import "./styles.css";
 
 const Categories = () => {
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -22,16 +25,26 @@ const Categories = () => {
   }, []);
 
 
-  const handleCategoryClick = (id,name) => {
+  const handleCategoryClick = (id, name) => {
     navigate(`/foods/${id}/${name}`);
   };
 
 
+  const handleSearch = (term) => {
+    setSearchTerm(term);
+  };
+
+  const filteredCategories = categories.filter((category) =>
+    category.category_name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
+    <>
+    <Header onSearch={handleSearch} />
     <div className="categories-container">
       <h2 className="categories-title">Categories</h2>
       <div className="categories-grid">
-        {categories.map((category) => (
+        {filteredCategories.map((category) => (
           <div
             key={category._id}
             className="category-card"
@@ -51,7 +64,9 @@ const Categories = () => {
           </div>
         ))}
       </div>
+   
     </div>
+    </>
   );
 };
 
