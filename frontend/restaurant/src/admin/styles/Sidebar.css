@@ -1,0 +1,45 @@
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  background-color: #525050;
+  color: white;
+  padding: 20px;
+}
+
+.logo-container {
+  text-align: center;
+  margin-bottom: 30px;
+  padding-right: 25px;
+}
+
+.logo {
+  width: 120px;
+  height: auto;
+  display: block; 
+}
+
+.nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+  padding: 12px 15px;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+  font-size: 1.2rem;
+}
+
+.nav-link:hover {
+  background-color: #B1171A;
+}
+
+.nav-link.active {
+  background-color: #B1171A;
+}
