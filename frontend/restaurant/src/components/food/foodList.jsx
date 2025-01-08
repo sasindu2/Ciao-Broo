@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import "./foodList.css";
-import pizzaImage from "../../assets/pizza.jpg";
+
 import logo from "../../assets/3d@4x.png";
 // import { useCart } from "../../context/CartContext";
 import axios from "axios";
@@ -9,7 +9,7 @@ import useCartStore from "../../store/store";
 
 function FoodList() {
   // const { categoryId } = useParams();
-  const { id,name } = useParams(); 
+  const { id, name } = useParams();
   const [foods, setFoods] = useState([]);
   const [categoryName, setCategoryName] = useState("");
   // const { cartItems, addToCart } = useCart();
@@ -21,7 +21,9 @@ function FoodList() {
     const fetchCategories = async () => {
       try {
         setCategoryName(name);
-        const response = await axios.get(`${import.meta.env.VITE_API}/api/Food/${id}`);
+        const response = await axios.get(
+          `${import.meta.env.VITE_API}/api/Food/${id}`
+        );
         setFoods(response.data.data);
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -32,7 +34,6 @@ function FoodList() {
   }, [id]);
 
   const handleAddToCart = (food) => {
-    
     // _id: "677e385dd3a1f0d35e692fbb"
     // category: "677cf988b141581ce03d9737"
     // description: "description"
@@ -47,7 +48,6 @@ function FoodList() {
       price: food.price,
       qty: 1,
     });
-
   };
 
   return (
@@ -82,7 +82,10 @@ function FoodList() {
                   >
                     Add to Cart
                   </button>
-                  <Link to={`/food/${food.id}`} className="view-btn">
+                  <Link
+                    to={`/foodDescription/${food._id}`}
+                    className="view-btn"
+                  >
                     View
                   </Link>
                 </div>
