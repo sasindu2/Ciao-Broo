@@ -6,6 +6,7 @@ import Categories from "./components/Categories";
 import AdminRoutes from "./routes/AdminRoutes";
 import FoodDescription from "./components/food/foodDescription";
 import Login from "./admin/components/Login";
+import { ProtectedRoute } from "./routes/ProtectedRoute";
 
 function App() {
   return (
@@ -16,7 +17,15 @@ function App() {
           <Route path="/foods/:id/:name" element={<FoodList />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/categories" element={<Categories />} />
-          <Route path="/admin/*" element={<AdminRoutes />} />
+
+          <Route
+            path="/admin/*"
+            element={
+              <ProtectedRoute>
+                <AdminRoutes />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/food/:foodId" element={<FoodDescription />} />
           <Route path="/admin/login" element={<Login />} />
         </Routes>
