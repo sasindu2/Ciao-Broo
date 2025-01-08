@@ -22,8 +22,8 @@ const Categories = () => {
   }, []);
 
 
-  const handleCategoryClick = (id) => {
-    navigate(`/food/${id}`);
+  const handleCategoryClick = (id,name) => {
+    navigate(`/foods/${id}/${name}`);
   };
 
 
@@ -35,7 +35,7 @@ const Categories = () => {
           <div
             key={category._id}
             className="category-card"
-            onClick={() => handleCategoryClick(category._id)}
+            onClick={() => handleCategoryClick(category._id, category.category_name)}
             style={{ cursor: "pointer" }} 
           >
             <div className="image-wrapper">

@@ -14,7 +14,7 @@ function App() {
       <CartProvider>
         <Routes>
           <Route path="/" element={<Categories />} />
-          <Route path="/foods" element={<FoodList />} />
+          <Route path="/foods/:id/:name" element={<FoodList />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/categories" element={<Categories />} />
           <Route path="/admin/*" element={<AdminRoutes />} />

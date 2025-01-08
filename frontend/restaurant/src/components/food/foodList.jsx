@@ -4,42 +4,29 @@ import "./foodList.css";
 import pizzaImage from "../../assets/pizza.jpg";
 import logo from "../../assets/3d@4x.png";
 import { useCart } from "../../context/CartContext";
+import axios from "axios";
 
 function FoodList() {
-  const { categoryId } = useParams();
+  // const { categoryId } = useParams();
+  const { id,name } = useParams(); 
   const [foods, setFoods] = useState([]);
   const [categoryName, setCategoryName] = useState("");
   const { cartItems, addToCart } = useCart();
 
-  // Dummy data - replace with your API call
+
   useEffect(() => {
-    // Example data
-    setCategoryName("Italian Food");
-    setFoods([
-      {
-        id: 1,
-        name: "Margherita Pizza",
-        price: 12.99,
-        description: "Fresh tomatoes, mozzarella, and basil",
-        image: pizzaImage,
-      },
-      {
-        id: 2,
-        name: "Margherita Pizza",
-        price: 15.99,
-        description: "Fresh tomatoes, mozzarella, and basil",
-        image: pizzaImage,
-      },
-      {
-        id: 3,
-        name: "Margherita Pizza",
-        price: 10.99,
-        description: "Fresh tomatoes, mozzarella, and basil",
-        image: pizzaImage,
-      },
-      // Add more food items...
-    ]);
-  }, [categoryId]);
+    const fetchCategories = async () => {
+      try {
+        setCategoryName(name);
+        const response = await axios.get(`http://localhost:5000/api/Food/${id}`);
+        setFoods(response.data.data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, [id]);
 
   const handleAddToCart = (food) => {
     console.log("Adding to cart:", food); // Debug log
@@ -64,7 +51,7 @@ function FoodList() {
 
       <div className="food-grid">
         {foods.map((food) => (
-          <div key={food.id} className="food-card">
+          <div key={food._id} className="food-card">
             <img src={food.image} alt={food.name} className="food-image" />
             <div className="food-details">
               <h3 className="food-name">{food.name}</h3>
