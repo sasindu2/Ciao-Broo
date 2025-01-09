@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/ItemList.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faSearch } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
+
 
 const ItemList = () => {
   const [items, setItems] = useState([
@@ -32,6 +34,24 @@ const ItemList = () => {
   const filteredItems = items.filter((item) =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+
+  useEffect(() => {
+    const fetchdata = async () => {
+      try {
+
+        const response = await axios.get(`${import.meta.env.VITE_API}/api/Food`);
+        console.log(response.data)
+
+
+      } catch (error) {
+        console.error("Error fetching Orders:", error);
+      }
+    };
+
+    fetchdata();
+  }, []);
+
 
   return (
     <div className="item-list-container">
