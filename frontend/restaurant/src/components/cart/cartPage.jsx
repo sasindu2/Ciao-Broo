@@ -1,6 +1,6 @@
 
 import { Link, useNavigate } from "react-router-dom";
-import "./cartpage.css";
+import "./cartpagefor.css";
 import { useState } from "react";
 import logo from "../../assets/3d@4x.png";
 import useCartStore from "../../store/store";
