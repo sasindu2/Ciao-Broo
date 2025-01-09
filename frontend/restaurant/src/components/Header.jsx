@@ -38,7 +38,7 @@ const Header = ({ onSearch }) => {
       <div className="banner">
         <h1 className="slogen">Flavors of Italy, Served with Passion</h1>
         <div className="search-container">
-          <div className="search-bar">
+          <div className="category-search-bar">
             <input
               type="text"
               placeholder="Category Name"
