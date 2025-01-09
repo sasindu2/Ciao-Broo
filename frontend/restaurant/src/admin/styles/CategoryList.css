@@ -49,23 +49,44 @@
   object-fit: cover;
   border-radius: 4px;
 }
+.action-btn{
+  display: flex;
 
-.action-cell {
-  width: 100px;
+
+  gap: 10px;
 }
 
+.action-cell {
+  /* display: flex; */
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 50px;
+  padding: 0 10px;
+}
+
+.edit-btn,
 .delete-btn {
   background: none;
   border: none;
-  color: #B1171A;
   cursor: pointer;
   padding: 8px;
   transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
 }
 
+.edit-btn {
+  color: #4CAF50;
+}
+
+.delete-btn {
+  color: #B1171A;
+}
+
+.edit-btn:hover,
 .delete-btn:hover {
   transform: scale(1.1);
-  color: #B1171A;
 }
 
 /* Responsive adjustments */

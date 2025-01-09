@@ -2,7 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/ItemList.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faSearch, faTrash } from "@fortawesome/free-solid-svg-icons";
+import Swal from "sweetalert2";
+import EditModal from "./EditModal";
 
 const ItemList = () => {
   const [items, setItems] = useState([
@@ -11,14 +13,41 @@ const ItemList = () => {
     { id: 3, name: "Pasta", price: 8.99, isAvailable: true },
   ]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
   const navigate = useNavigate();
 
-  const handleEdit = (id) => {
-    navigate(`/admin/items/edit/${id}`);
+  const handleEdit = (item) => {
+    setSelectedItem(item);
+    setIsEditModalOpen(true);
   };
 
+  const handleSaveEdit = (editedItem) => {
+    setItems(
+      items.map((item) => (item.id === editedItem.id ? editedItem : item))
+    );
+    setIsEditModalOpen(false);
+    setSelectedItem(null);
+  };
   const handleAddNew = () => {
     navigate("/admin/add-items");
+  };
+
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setItems(items.filter((item) => item.id !== id));
+        Swal.fire("Deleted!", "Your item has been deleted.", "success");
+      }
+    });
   };
 
   const handleAvailabilityToggle = (id) => {
@@ -84,9 +113,15 @@ const ItemList = () => {
                 <td className="action-buttons">
                   <button
                     className="edit-button"
-                    onClick={() => handleEdit(item.id)}
+                    onClick={() => handleEdit(item)}
                   >
                     ✏️
+                  </button>
+                  <button
+                    className="delete-btn"
+                    onClick={() => handleDelete(item.id)}
+                  >
+                    <FontAwesomeIcon icon={faTrash} />
                   </button>
                 </td>
               </tr>
@@ -94,6 +129,15 @@ const ItemList = () => {
           </tbody>
         </table>
       </div>
+      <EditModal
+        item={selectedItem}
+        isOpen={isEditModalOpen}
+        onClose={() => {
+          setIsEditModalOpen(false);
+          setSelectedItem(null);
+        }}
+        onSave={handleSaveEdit}
+      />
     </div>
   );
 };

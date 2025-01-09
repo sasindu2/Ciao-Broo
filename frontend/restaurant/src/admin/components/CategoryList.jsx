@@ -1,13 +1,21 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faPlus, faSearch } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTrash,
+  faPlus,
+  faSearch,
+  faPencilAlt,
+} from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import "../styles/CategoryList.css";
+import EditCategoryModal from "./EditCategoryModal";
 
 const CategoryList = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const [categories, setCategories] = useState([
     // Sample data - replace with your actual data
     { id: 1, name: "Appetizers", image: "appetizer-image-url" },
@@ -32,6 +40,21 @@ const CategoryList = () => {
         Swal.fire("Deleted!", "Category has been deleted.", "success");
       }
     });
+  };
+
+  const handleEdit = (category) => {
+    setSelectedCategory(category);
+    setIsEditModalOpen(true);
+  };
+
+  const handleSaveEdit = (editedCategory) => {
+    setCategories(
+      categories.map((cat) =>
+        cat.id === editedCategory.id ? editedCategory : cat
+      )
+    );
+    setIsEditModalOpen(false);
+    setSelectedCategory(null);
   };
 
   const filteredCategories = categories.filter((category) =>
@@ -86,18 +109,36 @@ const CategoryList = () => {
                   />
                 </td>
                 <td className="action-cell">
-                  <button
-                    className="delete-btn"
-                    onClick={() => handleDelete(category.id)}
-                  >
-                    <FontAwesomeIcon icon={faTrash} />
-                  </button>
+                  <div className="action-btn">
+                    <button
+                      className="edit-btn"
+                      onClick={() => handleEdit(category)}
+                    >
+                      <FontAwesomeIcon icon={faPencilAlt} />
+                    </button>
+                    <button
+                      className="delete-btn"
+                      onClick={() => handleDelete(category.id)}
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
+      <EditCategoryModal
+        category={selectedCategory}
+        isOpen={isEditModalOpen}
+        onClose={() => {
+          setIsEditModalOpen(false);
+          setSelectedCategory(null);
+        }}
+        onSave={handleSaveEdit}
+      />
     </div>
   );
 };
