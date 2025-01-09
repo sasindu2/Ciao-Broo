@@ -117,28 +117,6 @@ const Dashboard = () => {
       if (data && data.order) {
         const { order } = data;
 
-        if (Notification.permission === "granted") {
-          new Notification("New Order Received", {
-            body: `Order for ${order.customerName} at table ${order.tableNumber}`,
-            icon: order.products[0]?.image,
-          });
-          notification.onclick = () => {
-            window.open(`admin/dashboard`, "_blank");
-          };
-        } else if (Notification.permission !== "denied") {
-          Notification.requestPermission().then((permission) => {
-            if (permission === "granted") {
-              new Notification("New Order Received", {
-                body: `Order for ${order.customerName} at table ${order.tableNumber}`,
-                icon: order.products[0]?.image,
-              });
-              notification.onclick = () => {
-                window.open(`admin/dashboard`, "_blank");
-              };
-            }
-          });
-        }
-
         setOrders((prevOrders) => [
           ...prevOrders,
           {
