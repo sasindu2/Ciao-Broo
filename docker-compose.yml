@@ -1,0 +1,12 @@
+version: '3.4'
+
+services:
+  sampleproject:
+    image: sampleproject
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    env_file:
+      - .env
+    ports:
+      - 5173:5173
