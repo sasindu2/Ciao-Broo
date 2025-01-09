@@ -1,15 +1,23 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faPlus, faSearch } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTrash,
+  faPlus,
+  faSearch,
+  faPencilAlt,
+} from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import "../styles/CategoryList.css";
+import EditCategoryModal from "./EditCategoryModal";
 import axios from "axios";
-
 
 const CategoryList = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+
   // const [categories, setCategories] = useState([
   //   { id: 1, name: "Appetizers", image: "appetizer-image-url" },
   //   { id: 2, name: "Main Course", image: "main-course-image-url" },
@@ -21,11 +29,11 @@ const CategoryList = () => {
   useEffect(() => {
     const fetchdata = async () => {
       try {
-
-        const response = await axios.get(`${import.meta.env.VITE_API}/api/Category/`);
-        console.log(response.data)
+        const response = await axios.get(
+          `${import.meta.env.VITE_API}/api/Category/`
+        );
+        console.log(response.data);
         setCategories(response.data);
-
       } catch (error) {
         console.error("Error fetching Orders:", error);
       }
@@ -45,14 +53,16 @@ const CategoryList = () => {
       confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        
         const authData = JSON.parse(localStorage.getItem("authToken"));
         const token = authData?.token;
-        const response = await axios.delete(`${import.meta.env.VITE_API}/api/Category/${categoryId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        await axios.delete(
+          `${import.meta.env.VITE_API}/api/Category/${categoryId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         await setCategories(
           categories.filter((category) => category.id !== categoryId)
@@ -60,6 +70,21 @@ const CategoryList = () => {
         Swal.fire("Deleted!", "Category has been deleted.", "success");
       }
     });
+  };
+
+  const handleEdit = (category) => {
+    setSelectedCategory(category);
+    setIsEditModalOpen(true);
+  };
+
+  const handleSaveEdit = (editedCategory) => {
+    setCategories(
+      categories.map((cat) =>
+        cat.id === editedCategory.id ? editedCategory : cat
+      )
+    );
+    setIsEditModalOpen(false);
+    setSelectedCategory(null);
   };
 
   const filteredCategories = categories.filter((category) =>
@@ -114,18 +139,36 @@ const CategoryList = () => {
                   />
                 </td>
                 <td className="action-cell">
-                  <button
-                    className="delete-btn"
-                    onClick={() => handleDelete(category._id)}
-                  >
-                    <FontAwesomeIcon icon={faTrash} />
-                  </button>
+                  <div className="action-btn">
+                    <button
+                      className="edit-btn"
+                      onClick={() => handleEdit(category)}
+                    >
+                      <FontAwesomeIcon icon={faPencilAlt} />
+                    </button>
+                    <button
+                      className="delete-btn"
+                      onClick={() => handleDelete(category._id)}
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
+      <EditCategoryModal
+        category={selectedCategory}
+        isOpen={isEditModalOpen}
+        onClose={() => {
+          setIsEditModalOpen(false);
+          setSelectedCategory(null);
+        }}
+        onSave={handleSaveEdit}
+      />
     </div>
   );
 };

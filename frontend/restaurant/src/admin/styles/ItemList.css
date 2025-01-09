@@ -225,3 +225,23 @@ input:checked + .slider:before {
   color: #666;
   font-size: 14px;
 }
+.delete-btn {
+  background: none;
+  border: none;
+  color: #ff4444;
+  cursor: pointer;
+  padding: 8px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.delete-btn:hover {
+  transform: scale(1.1);
+  color: #ff0000;
+}
+
+.delete-btn i {
+  font-size: 1.2rem;
+}
