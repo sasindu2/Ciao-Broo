@@ -32,7 +32,7 @@ const Header = ({ onSearch }) => {
   return (
     <header className="header">
       <div className="header-section">
-        <img src="/src/assets/3d@4x.png" alt="Logo" className="logo" />
+        <img src="./assets/3d@4x.png" alt="Logo" className="logo" />
       </div>
 
       <div className="banner">
@@ -62,7 +62,7 @@ const Header = ({ onSearch }) => {
           )}
         </div>
         <img
-          src="/src/assets/bannerImage.png"
+          src="./assets/bannerImage.png"
           className="banner-img"
           alt="banner"
         />

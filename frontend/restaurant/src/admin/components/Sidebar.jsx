@@ -1,13 +1,12 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import logo from "../../assets/3d@4x.png";
 import "../styles/Sidebar.css";
 
 const Sidebar = () => {
   return (
     <div className="sidebar">
       <div className="logo-container">
-        <img src={logo} alt="Logo" className="logo" />
+        <img src="../../assets/3d@4x.png" alt="Logo" className="logo" />
       </div>
       <nav className="nav-links">
         <NavLink

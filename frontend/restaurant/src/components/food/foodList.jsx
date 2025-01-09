@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import "./foodList.css";
-
-import logo from "../../assets/3d@4x.png";
 // import { useCart } from "../../context/CartContext";
 import axios from "axios";
 import useCartStore from "../../store/store";
@@ -53,7 +51,7 @@ function FoodList() {
   return (
     <div className="food-list-container">
       <div className="food-list-header">
-        <img src={logo} alt="Website Logo" className="site-logo" />
+        <img src="../../assets/3d@4x.png" alt="Website Logo" className="site-logo" />
         <div
           className="header-left"
           style={{ display: "flex", gap: "20px", alignItems: "center" }}
