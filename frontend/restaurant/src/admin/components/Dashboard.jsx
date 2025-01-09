@@ -1,15 +1,16 @@
 /* eslint-disable-next-line no-unused-vars */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../styles/Dashboard.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import Swal from "sweetalert2";
 import axios from "axios";
+import io from "socket.io-client";
 
 
 const Dashboard = () => {
 
-
+  const socketRef = useRef(null);
   const [orders, setOrders] = useState([]);
   const [filterStatus, setFilterStatus] = useState("all");
   const [selectedOrder, setSelectedOrder] = useState(null);
@@ -104,6 +105,69 @@ const Dashboard = () => {
     };
 
     fetchOrders();
+  }, []);
+
+  useEffect(() => {
+    socketRef.current = io("http://localhost:5000/");
+
+
+    socketRef.current.on("newOrder", (data) => {
+      console.log("New order data received:", data);
+
+      if (data && data.order) {
+        const { order } = data;
+
+        if (Notification.permission === "granted") {
+          new Notification("New Order Received", {
+            body: `Order for ${order.customerName} at table ${order.tableNumber}`,
+            icon: order.products[0]?.image,
+          });
+          notification.onclick = () => {
+            window.open(`admin/dashboard`, "_blank");
+          };
+        } else if (Notification.permission !== "denied") {
+          Notification.requestPermission().then((permission) => {
+            if (permission === "granted") {
+              new Notification("New Order Received", {
+                body: `Order for ${order.customerName} at table ${order.tableNumber}`,
+                icon: order.products[0]?.image,
+              });
+              notification.onclick = () => {
+                window.open(`admin/dashboard`, "_blank");
+              };
+            }
+          });
+        }
+
+        setOrders((prevOrders) => [
+          ...prevOrders,
+          {
+            id: order._id,
+            customerName: order.customerName,
+            phoneNumber: order.customerTel,
+            tableNumber: order.tableNumber,
+            items: order.products.map((product) => ({
+              name: product.name,
+              price: parseFloat(product.price),
+              qty: product.qty
+            })),
+            status: order.order_status,
+            date: new Date(order.createdAt).toLocaleDateString(),
+            totalAmount: parseFloat(order.totalPrice),
+            createdAt: new Date(order.createdAt),
+          }
+        ]);
+      } else {
+        console.error("Order data is undefined or malformed", data);
+      }
+    });
+
+
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+      }
+    };
   }, []);
 
 
@@ -336,7 +400,7 @@ const Dashboard = () => {
                           ...prevOrder,
                           status: e.target.value,
                         }));
-                        
+
                         const authData = JSON.parse(localStorage.getItem("authToken"));
                         const token = authData?.token;
 
@@ -355,7 +419,7 @@ const Dashboard = () => {
                           );
 
                           console.log("Order status updated:", response.data);
-                          
+
                           alert("Order status updated successfully!");
                         } catch (error) {
                           console.error("Error updating order status:", error);
