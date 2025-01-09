@@ -108,7 +108,7 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
-    socketRef.current = io("http://localhost:5000/");
+    socketRef.current = io(`${import.meta.env.VITE_API}`);
 
 
     socketRef.current.on("newOrder", (data) => {
