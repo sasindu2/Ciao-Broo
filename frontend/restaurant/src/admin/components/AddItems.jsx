@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCloudUploadAlt, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { storage } from "../../firebase/config";
 import "../styles/AddItems.css";
+import axios from "axios";
+
 
 const AddItems = () => {
+
   const [formData, setFormData] = useState({
     name: "",
     price: "",
@@ -15,6 +18,13 @@ const AddItems = () => {
   const [imageUrl, setImageUrl] = useState("");
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
+  const [categories, setCategories] = useState([]);
+
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const handleInputChangeselect = (e) => {
+    setSelectedCategory(e.target.value); 
+    console.log("Selected Category:", e.target.value);  
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -72,18 +82,77 @@ const AddItems = () => {
     setIsUploading(false);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const { name, price, description, image } = formData;
+
+    const authData = JSON.parse(localStorage.getItem("authToken"));
+    const token = authData?.token;
+
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API}/api/Food`,
+        {
+          name: name,
+          price: price,
+          description: description,
+          category: selectedCategory,
+          image: imageUrl,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("Response:", response.data);
+      window.location.href = "/admin/ItemList";
+    } catch (error) {
+      console.error("Error creating category:", error);
+    }
+
     console.log({
       ...formData,
       imageUrl: imageUrl, // Include the Firebase URL
     });
   };
 
+  useEffect(() => {
+    const fetchdata = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API}/api/Category/`
+        );
+        // console.log(response.data);
+        setCategories(response.data);
+      } catch (error) {
+        console.error("Error fetching Orders:", error);
+      }
+    };
+
+    fetchdata();
+  }, []);
+
+
   return (
     <div className="add-items">
       <h1>Add New Item</h1>
       <form onSubmit={handleSubmit}>
+        <div className="form-row">
+          <div className="form-group-add-item">
+
+            <label>Category</label>
+            <select name="category" id="category" onChange={handleInputChangeselect}>
+              {categories.map((category) => (
+                <option key={category._id} value={category._id}>
+                  {category.category_name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+        </div>
         <div className="form-row">
           <div className="form-group-add-item">
             <label>Item Name</label>
