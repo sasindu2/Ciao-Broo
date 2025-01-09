@@ -1,12 +1,7 @@
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCloudUploadAlt } from "@fortawesome/free-solid-svg-icons";
-import {
-  ref,
-  uploadBytes,
-  getDownloadURL,
-  uploadBytesResumable,
-} from "firebase/storage";
+import { faCloudUploadAlt, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { storage } from "../../firebase/config";
 import "../styles/AddCategory.css";
 
@@ -29,18 +24,15 @@ const AddCategory = () => {
         uploadTask.on(
           "state_changed",
           (snapshot) => {
-            // Progress monitoring
             const progress =
               (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             setUploadProgress(progress);
           },
           (error) => {
-            // Error handling
             console.error("Error uploading image:", error);
             setIsUploading(false);
           },
           async () => {
-            // Upload completed
             const url = await getDownloadURL(uploadTask.snapshot.ref);
             setImageUrl(url);
             console.log("Firebase Storage URL:", url);
@@ -54,6 +46,13 @@ const AddCategory = () => {
     }
   };
 
+  const handleCancelImage = () => {
+    setCategoryImage(null);
+    setImageUrl("");
+    setUploadProgress(0);
+    setIsUploading(false);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Category Name:", categoryName);
@@ -64,7 +63,7 @@ const AddCategory = () => {
     <div className="add-category">
       <h1>Add New Category</h1>
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
+        <div className="form-group-add-category">
           <label htmlFor="categoryName">Category Name</label>
           <input
             type="text"
@@ -77,7 +76,7 @@ const AddCategory = () => {
           />
         </div>
 
-        <div className="form-group">
+        <div className="form-group-add-category">
           <label>Category Image</label>
           <div className="upload-section">
             <div className="file-upload-wrapper">
@@ -99,9 +98,16 @@ const AddCategory = () => {
                 </label>
               ) : (
                 <div className="image-preview-container">
+                  <button
+                    type="button"
+                    className="cancel-image-btn"
+                    onClick={handleCancelImage}
+                  >
+                    <FontAwesomeIcon icon={faTimes} />
+                  </button>
                   <div className="image-preview">
                     <img
-                      src={URL.createObjectURL(categoryImage)}
+                      src={imageUrl || URL.createObjectURL(categoryImage)}
                       alt="Category preview"
                     />
                   </div>
