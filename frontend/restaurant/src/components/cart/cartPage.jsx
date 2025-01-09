@@ -2,7 +2,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import "./cartpagefor.css";
 import { useState } from "react";
-import logo from "../../assets/3d@4x.png";
 import useCartStore from "../../store/store";
 
 
@@ -94,7 +93,7 @@ function CartPage() {
     <div className="cart-page">
       <div className="cart-header">
         <div className="logo-container">
-          <img src={logo} alt="Restaurant Logo" className="cart-logo" />
+          <img src="./assets/3d@4x.png" alt="Restaurant Logo" className="cart-logo" />
         </div>
         <div className="header-content">
           <h2>Your Cart</h2>
