@@ -20,7 +20,7 @@ function FoodList() {
       try {
         setCategoryName(name);
         const response = await axios.get(
-          `${import.meta.env.VITE_API}/api/Food/${id}`
+          `${import.meta.env.VITE_API}/api/Food/getavailablity/${id}`
         );
         setFoods(response.data.data);
       } catch (error) {
