@@ -32,13 +32,13 @@ const Header = ({ onSearch }) => {
   return (
     <header className="header">
       <div className="header-section">
-        <img src="./assets/3d@4x.png" alt="Logo" className="logo" />
+        <img src="/assets/3d@4x.png" alt="Logo" className="logo" />
       </div>
 
       <div className="banner">
         <h1 className="slogen">Flavors of Italy, Served with Passion</h1>
         <div className="search-container">
-          <div className="search-bar">
+          <div className="category-search-bar">
             <input
               type="text"
               placeholder="Category Name"
@@ -62,7 +62,7 @@ const Header = ({ onSearch }) => {
           )}
         </div>
         <img
-          src="./assets/bannerImage.png"
+          src="/assets/bannerImage.png"
           className="banner-img"
           alt="banner"
         />

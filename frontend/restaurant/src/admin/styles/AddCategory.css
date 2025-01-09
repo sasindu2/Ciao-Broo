@@ -17,7 +17,7 @@
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.form-group {
+.form-group-add-category {
   margin-bottom: 20px;
 }
 
@@ -45,14 +45,16 @@ label {
 .file-upload-wrapper {
   position: relative;
   width: 100%;
-  height: 100%;
+  height: 200px;
   border: 2px dashed rgba(240, 240, 240, 0.3);
   border-radius: 8px;
   overflow: hidden;
+  background-color: #ffffff1a;
 }
 
 .file-upload-input {
   position: absolute;
+  background-color: #ffffff1a;
   top: 0;
   left: 0;
   width: 100%;
@@ -62,7 +64,7 @@ label {
   z-index: 2;
 }
 
-.file-upload-label {
+ .file-upload-label {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -71,7 +73,7 @@ label {
   align-items: center;
   justify-content: center;
   background-color: rgba(255, 255, 255, 0.05);
-  color: #f0f0f0;
+  color: #ffffff1a;
   cursor: pointer;
   text-align: center;
   padding: 20px;
@@ -92,31 +94,37 @@ label {
   left: 50%;
   transform: translateX(-50%);
   font-size: 14px;
-  color: #f0f0f0;
+  color: #ffffff1a;
   width: 100%;
   text-align: center;
 }
 
 .file-upload-label:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: #ffffff1a;
+}
+
+.image-preview-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
 }
 
 .image-preview {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .image-preview img {
-  max-width: 100%;
-  max-height: 100%;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
+  padding: 10px;
 }
 
 .submit-btn {
@@ -133,4 +141,67 @@ label {
 
 .submit-btn:hover {
   background-color: #8f1115;
+}
+
+.upload-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 10px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: #4CAF50;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  display: block;
+  text-align: center;
+  margin-top: 5px;
+  font-size: 14px;
+  color: white;
+}
+
+.submit-btn:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.cancel-image-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 3;
+  transition: all 0.3s ease;
+}
+
+.cancel-image-btn svg {
+  color: white;
+  font-size: 16px;
+}
+
+.cancel-image-btn:hover {
+  background: rgba(177, 23, 26, 0.8);
+  transform: scale(1.1);
 } 
