@@ -8,11 +8,12 @@ import EditModal from "./EditModal";
 import axios from "axios";
 
 const ItemList = () => {
-  const [items, setItems] = useState([
-    { id: 1, name: "Burger", price: 9.99, isAvailable: true },
-    { id: 2, name: "Pizza", price: 12.99, isAvailable: false },
-    { id: 3, name: "Pasta", price: 8.99, isAvailable: true },
-  ]);
+  // const [items, setItems] = useState([
+  //   { id: 1, name: "Burger", price: 9.99, isAvailable: true },
+  //   { id: 2, name: "Pizza", price: 12.99, isAvailable: false },
+  //   { id: 3, name: "Pasta", price: 8.99, isAvailable: true },
+  // ]);
+  const [items, setItems] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -23,10 +24,35 @@ const ItemList = () => {
     setIsEditModalOpen(true);
   };
 
-  const handleSaveEdit = (editedItem) => {
-    setItems(
-      items.map((item) => (item.id === editedItem.id ? editedItem : item))
-    );
+  const handleSaveEdit = async (editedItem) => {
+    // console.log(editedItem);
+
+    const authData = JSON.parse(localStorage.getItem("authToken"));
+    const token = authData?.token;
+    try {
+      const response = await axios.patch(
+        `${import.meta.env.VITE_API}/api/Food/${editedItem._id}`,
+        {
+          name: editedItem.name,
+          price: editedItem.price,
+          description: editedItem.description
+
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      window.location.href = "/admin/ItemList";
+
+    } catch (error) {
+      console.error("Error fetching Orders:", error);
+    }
+
+    // setItems(
+    //   items.map((item) => (item.id === editedItem.id ? editedItem : item))
+    // );
     setIsEditModalOpen(false);
     setSelectedItem(null);
   };
@@ -43,21 +69,47 @@ const ItemList = () => {
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
-        setItems(items.filter((item) => item.id !== id));
+        const authData = JSON.parse(localStorage.getItem("authToken"));
+        const token = authData?.token;
+        await axios.delete(
+          `${import.meta.env.VITE_API}/api/Food/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        window.location.reload();
         Swal.fire("Deleted!", "Your item has been deleted.", "success");
       }
     });
   };
 
-  const handleAvailabilityToggle = (id) => {
-    setItems(
-      items.map((item) =>
-        item.id === id ? { ...item, isAvailable: !item.isAvailable } : item
-      )
-    );
+  const handleAvailabilityToggle = async (id) => {
+    const authData = JSON.parse(localStorage.getItem("authToken"));
+    const token = authData?.token;
+  
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API}/api/Food/availablity/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+  
+      console.log("Updated food item:", response.data);
+      window.location.reload();
+  
+    } catch (error) {
+      console.error("Error updating availability status:", error);
+    }
   };
+    
 
   const filteredItems = items.filter((item) =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -70,6 +122,7 @@ const ItemList = () => {
           `${import.meta.env.VITE_API}/api/Food`
         );
         console.log(response.data);
+        setItems(response.data);
       } catch (error) {
         console.error("Error fetching Orders:", error);
       }
@@ -111,17 +164,17 @@ const ItemList = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredItems.map((item) => (
-              <tr key={item.id}>
-                <td>{item.id}</td>
+            {filteredItems.map((item, index) => (
+              <tr key={item._id}>
+                <td>#{index + 1}</td>
                 <td>{item.name}</td>
-                <td>${item.price.toFixed(2)}</td>
+                <td>${item.price}</td>
                 <td>
                   <label className="switch">
                     <input
                       type="checkbox"
                       checked={item.isAvailable}
-                      onChange={() => handleAvailabilityToggle(item.id)}
+                      onChange={() => handleAvailabilityToggle(item._id)}
                     />
                     <span className="slider round"></span>
                   </label>
@@ -135,7 +188,7 @@ const ItemList = () => {
                   </button>
                   <button
                     className="delete-btn"
-                    onClick={() => handleDelete(item.id)}
+                    onClick={() => handleDelete(item._id)}
                   >
                     <FontAwesomeIcon icon={faTrash} />
                   </button>
