@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faSearch, faTrash } from "@fortawesome/free-solid-svg-icons";
 import Swal from "sweetalert2";
 import EditModal from "./EditModal";
-
 import axios from "axios";
 
 const ItemList = () => {
