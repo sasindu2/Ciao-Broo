@@ -18,11 +18,6 @@ const CategoryList = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
-  // const [categories, setCategories] = useState([
-  //   { id: 1, name: "Appetizers", image: "appetizer-image-url" },
-  //   { id: 2, name: "Main Course", image: "main-course-image-url" },
-  //   { id: 3, name: "Desserts", image: "dessert-image-url" },
-  // ]);
 
   const [categories, setCategories] = useState([]);
 
@@ -63,11 +58,8 @@ const CategoryList = () => {
             },
           }
         );
-
-        await setCategories(
-          categories.filter((category) => category.id !== categoryId)
-        );
         Swal.fire("Deleted!", "Category has been deleted.", "success");
+        window.location.href = "/admin/CategoryList";
       }
     });
   };
@@ -77,12 +69,32 @@ const CategoryList = () => {
     setIsEditModalOpen(true);
   };
 
-  const handleSaveEdit = (editedCategory) => {
-    setCategories(
-      categories.map((cat) =>
-        cat.id === editedCategory.id ? editedCategory : cat
-      )
-    );
+  const handleSaveEdit = async (editedCategory) => {
+
+    const authData = JSON.parse(localStorage.getItem("authToken"));
+    const token = authData?.token;
+    try {
+      const response = await axios.patch(
+        `${import.meta.env.VITE_API}/api/Category/${editedCategory._id}`,
+        {
+          category_name: editedCategory.name,
+          image: editedCategory.image,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response.data);
+      window.location.href = "/admin/CategoryList";
+
+
+    } catch (error) {
+      console.error("Error fetching Orders:", error);
+    }
+
+
     setIsEditModalOpen(false);
     setSelectedCategory(null);
   };

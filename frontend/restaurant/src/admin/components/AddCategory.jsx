@@ -4,6 +4,8 @@ import { faCloudUploadAlt, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { storage } from "../../firebase/config";
 import "../styles/AddCategory.css";
+import axios from "axios";
+
 
 const AddCategory = () => {
   const [categoryName, setCategoryName] = useState("");
@@ -53,11 +55,34 @@ const AddCategory = () => {
     setIsUploading(false);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Category Name:", categoryName);
     console.log("Category Image URL:", imageUrl);
+  
+    const authData = JSON.parse(localStorage.getItem("authToken"));
+    const token = authData?.token;
+  
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API}/api/Category`,
+        {
+          category_name: categoryName,
+          image: imageUrl,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("Response:", response.data);
+      window.location.href = "/admin/CategoryList";
+    } catch (error) {
+      console.error("Error creating category:", error);
+    }
   };
+  
 
   return (
     <div className="add-category">

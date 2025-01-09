@@ -18,7 +18,7 @@ const EditCategoryModal = ({ category, isOpen, onClose, onSave }) => {
   useEffect(() => {
     if (category) {
       setEditedCategory({
-        name: category.name || "",
+        name: category.category_name || "",
         image: category.image || "",
       });
       setImageUrl(category.image || "");
