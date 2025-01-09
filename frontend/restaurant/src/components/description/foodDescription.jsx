@@ -1,21 +1,29 @@
 import React from "react";
 import { ArrowLeft } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./foodDescription.css";
+import useCartStore from "../../store/store";
 
 function FoodDescription() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const food = location.state;
+  const addToCart = useCartStore((state) => state.addToCart);
 
-  const product = {
-    name: "Hot Honey Chicken",
-    price: "$34",
-    description:
-      "A dynamic duo of Spicy Nai Miris & mouthwatering Devilled Chicken. Where tradition meets taste! Made with the perfect blend of Mozzarella Cheese and a curated selection of 2 or more luscious toppings.A dynamic duo of Spicy Nai Miris & mouthwatering Devilled Chicken. Where tradition meets taste! Made with the perfect blend of Mozzarella Cheese and a curated selection of 2 or more luscious toppings.",
-    image: "/src/assets/hotpizza.png",
+  const handleAddToCart = (food) => {
+
+    addToCart({
+      id: food._id,
+      name: food.name,
+      image: food.image,
+      price: food.price,
+      qty: 1,
+    });
+    handleBack();
   };
 
   const handleBack = () => {
-    navigate(-1); // This will navigate to the previous page
+    navigate(-1);
   };
 
   return (
@@ -27,18 +35,18 @@ function FoodDescription() {
           onClick={handleBack}
           style={{ cursor: "pointer" }}
         />
-        <h1 className="description-title">{product.name}</h1>
+        <h1 className="description-title">{food.name}</h1>
       </div>
       <div className="description-content">
         <img
-          src={product.image}
-          alt={product.name}
+          src={food.image}
+          alt={food.name}
           className="description-image"
         />
         <div className="description-details">
-          <h2 className="description-price">{product.price}</h2>
-          <p className="description-text">{product.description}</p>
-          <button className="buy-button">Buy</button>
+          <h2 className="description-price">{food.price}</h2>
+          <p className="description-text">{food.description}</p>
+          <button className="buy-button" onClick={() => handleAddToCart(food)}>Buy</button>
         </div>
       </div>
     </div>

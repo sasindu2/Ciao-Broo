@@ -72,7 +72,7 @@ function FoodList() {
             <img src={food.image} alt={food.name} className="food-image" />
             <div className="food-details">
               <h3 className="food-name">{food.name}</h3>
-              <p className="food-description">{food.description}</p>
+              {/* <p className="food-description">{food.description}</p> */}
               <div className="food-card-footer">
                 <span className="food-price">${food.price}</span>
                 <div className="button-group">
@@ -84,6 +84,7 @@ function FoodList() {
                   </button>
                   <Link
                     to={`/foodDescription/${food._id}`}
+                    state={food} 
                     className="view-btn"
                   >
                     View
