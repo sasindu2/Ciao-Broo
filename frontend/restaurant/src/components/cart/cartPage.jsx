@@ -1,12 +1,10 @@
-
 import { Link, useNavigate } from "react-router-dom";
 import "./cartpagefor.css";
 import { useState } from "react";
 import useCartStore from "../../store/store";
-
+import Swal from "sweetalert2";
 
 function CartPage() {
-
   const navigate = useNavigate();
   const [customerDetails, setCustomerDetails] = useState({
     name: "",
@@ -20,12 +18,11 @@ function CartPage() {
   const itemuremove = useCartStore((state) => state.removeFromCart);
   const totalPrice = useCartStore((state) => state.getTotalPrice());
 
-
-  const handleIncrement = (id,qty) => {
+  const handleIncrement = (id, qty) => {
     itemupdateQuantity(id, qty + 1);
   };
 
-  const handleDecrement = (id,qty) => {
+  const handleDecrement = (id, qty) => {
     if (qty > 1) {
       itemupdateQuantity(id, qty - 1);
     }
@@ -51,49 +48,82 @@ function CartPage() {
         .scrollIntoView({ behavior: "smooth" });
       return;
     }
-    setShowError(false);
-    console.log("Proceeding to checkout", { customerDetails });
-    
-    const orderData = {
-      customerName: customerDetails.name,
-      customerTel: customerDetails.phone,
-      tableNumber: customerDetails.tableNumber,
-      products: cartItemsets,
-      totalPrice: totalPrice.toFixed(2), 
-    };
 
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API}/api/Order`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(orderData),
-      });
-  
-      if (response.ok) {
-        const result = await response.json();
-        console.log("Order successfully placed!", result);
-        useCartStore.getState().clearCart();
-        navigate("/");
-      } else {
-        console.error("Failed to place order", response.statusText);
+    Swal.fire({
+      title: "Confirm Order",
+      text: `Total Amount: $${totalPrice.toFixed(2)}`,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#4CAF50",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, place order!",
+      cancelButtonText: "Cancel",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const orderData = {
+            customerName: customerDetails.name,
+            customerTel: customerDetails.phone,
+            tableNumber: customerDetails.tableNumber,
+            products: cartItemsets,
+            totalPrice: totalPrice.toFixed(2),
+          };
+
+          const response = await fetch(
+            `${import.meta.env.VITE_API}/api/Order`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(orderData),
+            }
+          );
+
+          if (response.ok) {
+            Swal.fire({
+              title: "Success!",
+              text: "Your order has been placed successfully. you will receive order within 15 minutes",
+              icon: "success",
+              confirmButtonColor: "#4CAF50",
+            }).then(() => {
+              useCartStore.getState().clearCart();
+              navigate("/");
+            });
+          } else {
+            Swal.fire({
+              title: "Error!",
+              text: "Failed to place order",
+              icon: "error",
+              confirmButtonColor: "#d33",
+            });
+          }
+        } catch (error) {
+          console.error("Checkout error:", error);
+          Swal.fire({
+            title: "Error!",
+            text: `An error occurred: ${error.message}`,
+            icon: "error",
+            confirmButtonColor: "#d33",
+          });
+        }
       }
-    } catch (error) {
-      console.error("An error occurred during checkout:", error);
-    }
-
+    });
   };
 
   const handleContinueShopping = () => {
-    navigate("/"); 
+    navigate("/");
   };
 
   return (
     <div className="cart-page">
       <div className="cart-header">
         <div className="logo-container">
-          <img src="./assets/3d@4x.png" alt="Restaurant Logo" className="cart-logo" />
+          <img
+            src="./assets/3d@4x.png"
+            alt="Restaurant Logo"
+            className="cart-logo"
+          />
         </div>
         <div className="header-content">
           <h2>Your Cart</h2>
@@ -172,17 +202,13 @@ function CartPage() {
                   <div className="cart-item-actions">
                     <div className="quantity-controls">
                       <button
-                        onClick={() =>
-                          handleDecrement(item.id, item.qty)
-                        }
+                        onClick={() => handleDecrement(item.id, item.qty)}
                       >
                         -
                       </button>
                       <span>{item.qty}</span>
                       <button
-                        onClick={() =>
-                          handleIncrement(item.id, item.qty)
-                        }
+                        onClick={() => handleIncrement(item.id, item.qty)}
                       >
                         +
                       </button>
