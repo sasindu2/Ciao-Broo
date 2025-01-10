@@ -15,6 +15,11 @@ const AdminRoutes = () => {
   
 
   useEffect(() => {
+
+    if (Notification.permission === "default") {
+      Notification.requestPermission();
+    }
+    
     socketRef.current = io(`${import.meta.env.VITE_API}`);
 
 
