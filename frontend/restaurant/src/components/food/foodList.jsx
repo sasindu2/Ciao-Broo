@@ -51,7 +51,11 @@ function FoodList() {
   return (
     <div className="food-list-container">
       <div className="food-list-header">
-        <img src="../../assets/3d@4x.png" alt="Website Logo" className="site-logo" />
+        <img
+          src="../../assets/3d@4x.png"
+          alt="Website Logo"
+          className="site-logo"
+        />
         <div
           className="header-left"
           style={{ display: "flex", gap: "20px", alignItems: "center" }}
@@ -82,7 +86,7 @@ function FoodList() {
                   </button>
                   <Link
                     to={`/foodDescription/${food._id}`}
-                    state={food} 
+                    state={food}
                     className="view-btn"
                   >
                     View
