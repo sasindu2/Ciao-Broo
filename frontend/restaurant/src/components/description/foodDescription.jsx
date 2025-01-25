@@ -44,7 +44,7 @@ function FoodDescription() {
           className="description-image"
         />
         <div className="description-details">
-          <h2 className="description-price">{food.price}</h2>
+          <h2 className="description-price">€{food.price}</h2>
           <p className="description-text">{food.description}</p>
           <button className="buy-button" onClick={() => handleAddToCart(food)}>Buy</button>
         </div>

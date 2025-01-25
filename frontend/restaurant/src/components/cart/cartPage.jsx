@@ -214,7 +214,7 @@ function CartPage() {
                       </button>
                     </div>
                     <span className="item-price">
-                      ${(item.price * item.qty).toFixed(2)}
+                    €{(item.price * item.qty).toFixed(2)}
                     </span>
                     <button
                       className="remove-item"
@@ -231,7 +231,7 @@ function CartPage() {
           <div className="cart-summary">
             <div className="total">
               <span>Total:</span>
-              <span>${totalPrice.toFixed(2)}</span>
+              <span>€{totalPrice.toFixed(2)}</span>
             </div>
             <button className="checkout-button" onClick={handleCheckout}>
               Proceed to Checkout

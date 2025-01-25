@@ -76,7 +76,7 @@ function FoodList() {
               <h3 className="food-name">{food.name}</h3>
               {/* <p className="food-description">{food.description}</p> */}
               <div className="food-card-footer">
-                <span className="food-price">${food.price}</span>
+                <span className="food-price">€{food.price}</span>
                 <div className="button-group">
                   <button
                     className="add-to-cart-btn"
