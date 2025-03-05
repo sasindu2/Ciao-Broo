@@ -17,7 +17,45 @@ body {
     padding: 15px 30px;
   
  
-
+/* /// */
+.header-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+  }
+  
+  /* Container for the Google Translate widget */
+  .language-selector {
+    margin-left: 20px;
+  }
+  
+  /* Style the Google Translate dropdown (limited control, but we can try) */
+  .google-translate-element {
+    display: inline-block;
+  }
+  
+  /* Target the Google Translate select element (note: Google adds its own classes dynamically) */
+  .goog-te-combo {
+    padding: 8px 12px !important;
+    border-radius: 4px !important;
+    border: 1px solid #ccc !important;
+    background-color: white !important;
+    cursor: pointer !important;
+    font-size: 14px !important;
+  }
+  
+  /* Hover effect */
+  .goog-te-combo:hover {
+    border-color: #007bff !important;
+  }
+  
+  /* Focus effect */
+  .goog-te-combo:focus {
+    outline: none !important;
+    border-color: #007bff !important;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3) !important;
+  }
   
 
 }

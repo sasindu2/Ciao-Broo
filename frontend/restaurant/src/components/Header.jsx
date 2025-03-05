@@ -6,6 +6,8 @@ const Header = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState([]);
 
+
+
   const handleSearch = (e) => {
     const value = e.target.value;
     setSearchTerm(value);
@@ -33,6 +35,9 @@ const Header = ({ onSearch }) => {
     <header className="header">
       <div className="header-section">
         <img src="/assets/3d@4x.png" alt="Logo" className="logo" />
+        <div className="language-selector">
+          <div id="google_translate_element"></div> {/* Google Translate widget */}
+        </div>
       </div>
 
       <div className="banner">
